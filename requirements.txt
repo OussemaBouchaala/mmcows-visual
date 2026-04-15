@@ -1,0 +1,41 @@
+# MMCows Project — Python Dependencies (conflict-free)
+# Python 3.9 recommended
+#
+# INSTALL INSTRUCTIONS:
+# 1. Delete your current venv entirely
+# 2. Create a fresh one:   python -m venv venv
+# 3. Activate it:          venv\Scripts\activate
+# 4. Install:              pip install -r requirements.txt
+# ─────────────────────────────────────────────────────────────
+
+# Core — pinned to avoid numpy conflicts
+numpy==1.24.3
+pandas==2.0.3
+matplotlib==3.7.3
+scipy==1.11.4
+scikit-learn==1.3.2
+Pillow==10.3.0
+PyYAML==6.0.1
+seaborn==0.12.2
+
+# Computer vision
+opencv-python==4.8.1.78
+
+# Jupyter
+jupyter==1.0.0
+notebook==7.2.1
+ipykernel==6.29.3
+
+# Progress bars
+tqdm==4.66.4
+
+# ── I3-4: YOLOv8 ─────────────────────────────────────────────
+ultralytics==8.2.0
+
+# ── I3-6: DeepSORT Kalman filter ─────────────────────────────
+filterpy==1.4.5
+
+# ── I4: Deep learning ────────────────────────────────────────
+# PyTorch: install SEPARATELY after this file (see note below)
+# torch==2.1.2
+# torchvision==0.16.2
