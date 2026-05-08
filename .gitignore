@@ -28,3 +28,7 @@ src/
 
 # models
 trained_models/
+
+notebooks/runs
+
+notebooks/detect/runs
