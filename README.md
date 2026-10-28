@@ -1,4 +1,31 @@
-# Vision-Based Dairy Cattle Behaviour Recognition (MmCows)
+<h1 align="center">🐄 MmCows Visual: Cattle Behaviour & Identity from Barn Cameras</h1>
+<p align="center"><b>Python · PyTorch · YOLOv8 · EfficientNet · ViT · multi-view geometry · MLflow</b></p>
+
+---
+
+## Problem
+
+Farmers need to know what each cow is doing (feeding, lying, walking, drinking…) to catch illness and welfare issues early, but watching barn video by hand does not scale. The hard part is not finding cows in an image; it is telling 16 nearly identical Holstein cows apart across 4 cameras.
+
+## Solution
+
+A four-stage vision pipeline (detect → classify behaviour → identify the cow → fuse the 4 camera views in 3D), evaluated with honest temporal cross-validation, plus an experiment that merges detection and identification into one YOLOv8 model.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    CAM[4 barn cameras<br/>4.5K frames] --> DET[1. YOLOv8<br/>cow detection]
+    DET --> CROP[Crops 224×224]
+    CROP --> BEH[2. EfficientNet-B0<br/>7 behaviours]
+    CROP --> ID[3. Identity routing<br/>lying / non-lying identifiers]
+    BEH --> VOTE[4. Multi-view voting<br/>3D projection + weighted vote]
+    ID --> VOTE
+    VOTE --> OUT[(Behaviour per cow<br/>per timestamp)]
+    OUT --> MBT[Team's multimodal<br/>transformer + sensors]
+```
+
+## Overview
 
 Visual pipeline for recognising the behaviour and identity of 16 Holstein cows from four 4.5K barn cameras. Part of a 4-person INSAT engineering project extending the MmCows benchmark (defended June 2026); this repo is the **vision branch** (my contribution).
 
@@ -87,13 +114,23 @@ outputs/results/  evaluation outputs
 setup_project.sh  environment setup
 ```
 
-## Quick start
+## How to run
+
+The MmCows dataset is not included (too large for git); download it from the [official repo](https://github.com/neis-lab/mmcows).
 
 ```bash
-bash setup_project.sh
+git clone https://github.com/OussemaBouchaala/mmcows-visual.git
+cd mmcows-visual
+bash setup_project.sh                 # creates folders and the virtual env
 pip install -r requirements.txt
-# Dataset download instructions: see "download link.txt"
+
+python scripts/a1_build_index.py      # index images + labels from the 4 cameras
+python scripts/a2_yolo_binary.py      # write YOLO train/val/test splits + dataset yaml
 ```
+
+Then open the notebooks in order (`notebooks/I3_1` → `I3_4`, then `detect/` and `tracking/`) for training, identification and tracking experiments. Training runs are logged with MLflow under `runs/`.
+
+No GPU or dataset? The results tables above summarise every experiment.
 
 ## Dataset
 
